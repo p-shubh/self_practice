@@ -6,6 +6,13 @@
 
 package main
 
+import (
+	"fmt"
+	"sync"
+)
+
+var wg sync.WaitGroup
+
 func main() {
 
 	/*
@@ -25,4 +32,42 @@ func main() {
 		prepeared for some cases to being.
 	*/
 
+	wg.Add(2)
+	go foo()
+	go bar()
+	wg.Wait()
+
+	fmt.Println(Adder(698, 98979, 9678799, 7687989, 897))
+	fmt.Println(Sqrt(49))
+
+}
+
+func foo() {
+	for i := 0; i < 45; i++ {
+		fmt.Println("Foo:", i)
+	}
+	wg.Done()
+}
+
+func bar() {
+	for i := 0; i < 45; i++ {
+		fmt.Println("Bar:", i)
+	}
+	wg.Done()
+}
+
+func Adder(xs ...int) int {
+	res := 0
+	for _, v := range xs {
+		res += v
+	}
+	return res
+}
+
+func Sqrt(x float64) float64 {
+	z := 0.0
+	for i := 0; i < 1000; i++ {
+		z -= (z*z - x) / (2 * x)
+	}
+	return z
 }
